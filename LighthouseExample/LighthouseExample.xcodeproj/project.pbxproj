@@ -1,0 +1,340 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B523CA8E18E2A2EA00DECAA3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B523CA8D18E2A2EA00DECAA3 /* Foundation.framework */; };
+		B523CA9018E2A2EA00DECAA3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B523CA8F18E2A2EA00DECAA3 /* CoreGraphics.framework */; };
+		B523CA9218E2A2EA00DECAA3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B523CA9118E2A2EA00DECAA3 /* UIKit.framework */; };
+		B523CA9818E2A2EA00DECAA3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B523CA9618E2A2EA00DECAA3 /* InfoPlist.strings */; };
+		B523CA9A18E2A2EA00DECAA3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B523CA9918E2A2EA00DECAA3 /* main.m */; };
+		B523CA9E18E2A2EA00DECAA3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B523CA9D18E2A2EA00DECAA3 /* AppDelegate.m */; };
+		B523CAA018E2A2EA00DECAA3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B523CA9F18E2A2EA00DECAA3 /* Images.xcassets */; };
+		B523CAC318E2A38A00DECAA3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B523CAC218E2A38A00DECAA3 /* CoreLocation.framework */; };
+		B523CAC518E2A39000DECAA3 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B523CAC418E2A39000DECAA3 /* CoreBluetooth.framework */; };
+		B523CAC718E2A39600DECAA3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B523CAC618E2A39600DECAA3 /* CoreMotion.framework */; };
+		B523CAC918E2A47D00DECAA3 /* libLighthouse.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B523CAC818E2A47D00DECAA3 /* libLighthouse.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B523CA8A18E2A2EA00DECAA3 /* LighthouseExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LighthouseExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B523CA8D18E2A2EA00DECAA3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		B523CA8F18E2A2EA00DECAA3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		B523CA9118E2A2EA00DECAA3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		B523CA9518E2A2EA00DECAA3 /* LighthouseExample-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LighthouseExample-Info.plist"; sourceTree = "<group>"; };
+		B523CA9718E2A2EA00DECAA3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		B523CA9918E2A2EA00DECAA3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B523CA9B18E2A2EA00DECAA3 /* LighthouseExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LighthouseExample-Prefix.pch"; sourceTree = "<group>"; };
+		B523CA9C18E2A2EA00DECAA3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		B523CA9D18E2A2EA00DECAA3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		B523CA9F18E2A2EA00DECAA3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		B523CAA618E2A2EA00DECAA3 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		B523CABF18E2A32600DECAA3 /* LighthouseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LighthouseManager.h; path = ../Lighthouse/LighthouseManager.h; sourceTree = "<group>"; };
+		B523CAC218E2A38A00DECAA3 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		B523CAC418E2A39000DECAA3 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		B523CAC618E2A39600DECAA3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		B523CAC818E2A47D00DECAA3 /* libLighthouse.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLighthouse.a; path = ../Lighthouse/libLighthouse.a; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B523CA8718E2A2EA00DECAA3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B523CAC718E2A39600DECAA3 /* CoreMotion.framework in Frameworks */,
+				B523CAC518E2A39000DECAA3 /* CoreBluetooth.framework in Frameworks */,
+				B523CAC318E2A38A00DECAA3 /* CoreLocation.framework in Frameworks */,
+				B523CAC918E2A47D00DECAA3 /* libLighthouse.a in Frameworks */,
+				B523CA9018E2A2EA00DECAA3 /* CoreGraphics.framework in Frameworks */,
+				B523CA9218E2A2EA00DECAA3 /* UIKit.framework in Frameworks */,
+				B523CA8E18E2A2EA00DECAA3 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B523CA8118E2A2EA00DECAA3 = {
+			isa = PBXGroup;
+			children = (
+				B523CABC18E2A31200DECAA3 /* Lighthouse */,
+				B523CA9318E2A2EA00DECAA3 /* LighthouseExample */,
+				B523CA8C18E2A2EA00DECAA3 /* Frameworks */,
+				B523CA8B18E2A2EA00DECAA3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B523CA8B18E2A2EA00DECAA3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B523CA8A18E2A2EA00DECAA3 /* LighthouseExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B523CA8C18E2A2EA00DECAA3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B523CAC618E2A39600DECAA3 /* CoreMotion.framework */,
+				B523CAC418E2A39000DECAA3 /* CoreBluetooth.framework */,
+				B523CAC218E2A38A00DECAA3 /* CoreLocation.framework */,
+				B523CA8D18E2A2EA00DECAA3 /* Foundation.framework */,
+				B523CA8F18E2A2EA00DECAA3 /* CoreGraphics.framework */,
+				B523CA9118E2A2EA00DECAA3 /* UIKit.framework */,
+				B523CAA618E2A2EA00DECAA3 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B523CA9318E2A2EA00DECAA3 /* LighthouseExample */ = {
+			isa = PBXGroup;
+			children = (
+				B523CA9C18E2A2EA00DECAA3 /* AppDelegate.h */,
+				B523CA9D18E2A2EA00DECAA3 /* AppDelegate.m */,
+				B523CA9F18E2A2EA00DECAA3 /* Images.xcassets */,
+				B523CA9418E2A2EA00DECAA3 /* Supporting Files */,
+			);
+			path = LighthouseExample;
+			sourceTree = "<group>";
+		};
+		B523CA9418E2A2EA00DECAA3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B523CA9518E2A2EA00DECAA3 /* LighthouseExample-Info.plist */,
+				B523CA9618E2A2EA00DECAA3 /* InfoPlist.strings */,
+				B523CA9918E2A2EA00DECAA3 /* main.m */,
+				B523CA9B18E2A2EA00DECAA3 /* LighthouseExample-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B523CABC18E2A31200DECAA3 /* Lighthouse */ = {
+			isa = PBXGroup;
+			children = (
+				B523CAC818E2A47D00DECAA3 /* libLighthouse.a */,
+				B523CABF18E2A32600DECAA3 /* LighthouseManager.h */,
+			);
+			name = Lighthouse;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B523CA8918E2A2EA00DECAA3 /* LighthouseExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B523CAB618E2A2EA00DECAA3 /* Build configuration list for PBXNativeTarget "LighthouseExample" */;
+			buildPhases = (
+				B523CA8618E2A2EA00DECAA3 /* Sources */,
+				B523CA8718E2A2EA00DECAA3 /* Frameworks */,
+				B523CA8818E2A2EA00DECAA3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LighthouseExample;
+			productName = LighthouseExample;
+			productReference = B523CA8A18E2A2EA00DECAA3 /* LighthouseExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B523CA8218E2A2EA00DECAA3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = Lighthouse;
+			};
+			buildConfigurationList = B523CA8518E2A2EA00DECAA3 /* Build configuration list for PBXProject "LighthouseExample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = B523CA8118E2A2EA00DECAA3;
+			productRefGroup = B523CA8B18E2A2EA00DECAA3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B523CA8918E2A2EA00DECAA3 /* LighthouseExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B523CA8818E2A2EA00DECAA3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B523CA9818E2A2EA00DECAA3 /* InfoPlist.strings in Resources */,
+				B523CAA018E2A2EA00DECAA3 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B523CA8618E2A2EA00DECAA3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B523CA9E18E2A2EA00DECAA3 /* AppDelegate.m in Sources */,
+				B523CA9A18E2A2EA00DECAA3 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		B523CA9618E2A2EA00DECAA3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B523CA9718E2A2EA00DECAA3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B523CAB418E2A2EA00DECAA3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B523CAB518E2A2EA00DECAA3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B523CAB718E2A2EA00DECAA3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LighthouseExample/LighthouseExample-Prefix.pch";
+				INFOPLIST_FILE = "LighthouseExample/LighthouseExample-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/ben/Sites/lighthouse-ios/Lighthouse",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		B523CAB818E2A2EA00DECAA3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LighthouseExample/LighthouseExample-Prefix.pch";
+				INFOPLIST_FILE = "LighthouseExample/LighthouseExample-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/ben/Sites/lighthouse-ios/Lighthouse",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B523CA8518E2A2EA00DECAA3 /* Build configuration list for PBXProject "LighthouseExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B523CAB418E2A2EA00DECAA3 /* Debug */,
+				B523CAB518E2A2EA00DECAA3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B523CAB618E2A2EA00DECAA3 /* Build configuration list for PBXNativeTarget "LighthouseExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B523CAB718E2A2EA00DECAA3 /* Debug */,
+				B523CAB818E2A2EA00DECAA3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B523CA8218E2A2EA00DECAA3 /* Project object */;
+}
