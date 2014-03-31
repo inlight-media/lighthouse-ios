@@ -181,6 +181,10 @@ You will also need to add the following methods in your AppDelegate so Lighthous
 
 ## Changelog
 
+##### 1.1.1
+
++ Updated internat domain name that data is POSTed to.
+
 ##### 1.1.0
 
 + Added push notification permission support.
