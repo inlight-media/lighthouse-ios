@@ -1,11 +1,11 @@
 Lighthouse iOS SDK
 ===============
 
-The Lighthouse iOS SDK is designed to be simple to develop with, allowing you to easily integrate Lighthouse iBeacon software into your apps. For more info about Lighthouse visit the [Lighthouse Website](http://lighthousebeacon.com.au)
+The Lighthouse iOS SDK is designed to be simple to develop with, allowing you to easily integrate Lighthouse iBeacon software into your apps. For more info about Lighthouse visit the [Lighthouse Website](http://lighthousebeacon.io)
 
 ## Install Guide
 
-Installing the client should be a breeze. If it's not, please let us know at [team@lighthousebeacon.com.au](mailto:team@lighthousebeacon.com.au)
+Installing the client should be a breeze. If it's not, please let us know at [team@lighthousebeacon.io](mailto:team@lighthousebeacon.io)
 
 ### Universal Library
 
@@ -28,20 +28,22 @@ Go into your app's target’s Build Phases screen and add the following (if they
 - CoreLocation.framework
 - CoreBluetooth.framework
 
+### Build Settings
+Under your application targets "Build Settings" configuration find the "Other Linker Flags" property and set it to "-ObjC".
+
 ### Import LighthouseManager.h
 You'll need to import the LighthouseManager.h header into the files that contain code relating to lighthouse. You can either add them to individual files or include it in your ApplicationName-Prefix.pch file.
 
 	#import "LighthouseManager.h"
-	
 
 ### Add Background Modes
 In your application plist file (often called "ApplicationName-Info.plist") add a row for
 "Required background modes" of type Array. It then needs "App registers for location updates" and "App communicates using CoreBluetooth". Thesea are needed to receive the background beacon notifications
 
 ### Compile
-Try and compile. It should work! 
+Try and compile. It should work!
 
-If it doesn't work, let us know at [team@lighthousebeacon.com.au](mailto:team@lighthousebeacon.com.au) and one of us will help you right away.
+If it doesn't work, let us know at [team@lighthousebeacon.io](mailto:team@lighthousebeacon.io) and one of us will help you right away.
 
 ### Get Application ID & Keys
 If you haven't done so already, login to Ligthouse to get your Application ID & Keys.
@@ -56,10 +58,10 @@ Register the LighthouseManager with your Application ID and access keys. The rec
 	- (void)applicationDidBecomeActive:(UIApplication *)application {
 		// Enable logging (optional)
 		[LighthouseManager enableLogging];
-		
+
 		// Enable NSNotification events to be transmitted on enter/exit/range (optional)
 		[LighthouseManager enableNotifications];
-		
+
 		// Configure the manager using Lighthouse keys
 		[[LighthouseManager sharedInstance] configure:@{
 			@"appId": @"your_app_id",
@@ -68,20 +70,20 @@ Register the LighthouseManager with your Application ID and access keys. The rec
 			@"appVersion": @"your_app_version", // optional
 			@"uuids": @[@"beacon_uuids_to_monitor"]
 		}];
-		
+
 		// Start monitoring
 		[[LighthouseManager sharedInstance] launch];
-		
+
 		// Request permission (you can do this whenever you like - it will ask user for location permission - possibly you want to wait until they reach a certain section of your app)
 		[[LighthouseManager sharedInstance] requestPermission];
 	}
 
-	
+
 From now on, in your code, you can just reference the shared client by calling [LighthouseManager sharedInstance].
 
 ### Application Suspend & Resume
 To best conserve battery and correctly trigger Lighthouse events you'll need to add the following lines to your application delegate.
-	
+
 	- (void)applicationWillResignActive:(UIApplication *)application {
 		[[LighthouseManager sharedInstance] suspend];
 	}
@@ -105,27 +107,85 @@ To disable logging (by default it is disabled), simply call:
 
 	[LighthouseManager disableLogging];
 
-### Notifications
-The Lighthouse iOS SDK doesn't just hog all the beacon events, after all sharing is caring. If enabled the SDK sends out NSNotificationCenter events when ever a user enters, exits or ranges (usually every second when within a beacon). These notifications contain a NSDictionary full of useful information such as the beacon ids, distance, accuracy, user's compass direction, etc. 
+### Notifications / Events
+The Lighthouse iOS SDK doesn't keep all the beacon events for itself, after all sharing is caring. If enabled the SDK sends out NSNotificationCenter events when ever a user enters, exits or ranges (usually every second when within a beacon). These notifications contain a NSDictionary full of useful information such as the beacon ids, distance, accuracy, user's compass direction, etc.
 
 	[LighthouseManager enableNotifications];
 
-Just put this at any point before you use LighthouseManager. A good place is in your application delegate.
+Just put this at any point in your codebase. A good place is in your application delegate.
 
 To disable notifications (by default it is disabled), simply call:
 
 	[LighthouseManager disableNotifications];
 
+You can then listen to these NSNotifications using the following example commands:
+
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBeacon:) name:@"LighthouseDidEnterBeacon" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didExitBeacon:) name:@"LighthouseDidExitBeacon" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRangeBeacon:) name:@"LighthouseDidRangeBeacon" object:nil];
+
+	#pragma mark - Notification Handers
+
+	- (void)didEnterBeacon:(NSNotification *)notification {
+		NSLog(@"didEnterBeacon %@", notification.userInfo);
+	}
+
+	- (void)didExitBeacon:(NSNotification *)notification {
+		NSLog(@"didExitBeacon %@", notification.userInfo);
+	}
+
+	- (void)didRangeBeacon:(NSNotification *)notification {
+		NSLog(@"didRangeBeacon %@", notification.userInfo);
+	}
+
+### Transmission
+There are times when you will want to leverage the Lighthouse SDK to easily access iBeacon events but you may not want it to transmit data to Lighthouse API. This could be the case during development or possibly if a user does not want their movements tracked. You can use the following methods to control whether the SDK transmits data to the server. By default it is enabled.
+
+	[LighthouseManager enableTransmission];
+
+Just put this at any point before you use LighthouseManager. A good place is in your application delegate.
+
+To disable transmission to the Ligthhouse server, simply call:
+
+	[LighthouseManager disableTransmission];
+
 ### Requesting Permission
-You've all had that experience when you launch an app for the first time and get bombarded with permission requests for notifications, location, movement, microphones - the list goes on. In some situations you may wish to avoid this and only request permission at a relevant time in the user experience. We added the ```requestPermission``` method for this reason. Lighthouse won't work until permission has been requested (and accepted by the user). 
+You've all had that experience when you launch an app for the first time and get bombarded with permission requests for notifications, location, movement, microphones - the list goes on. In some situations you may wish to avoid this and only request location permission at a relevant time in the user experience. We added the ```requestPermission``` method for this reason. Lighthouse won't work until permission has been requested (and accepted by the user).
 
 	[[LighthouseManager sharedInstance] requestPermission];
-	
+
 You can also check whether permission has been requested previously using:
 
 	[[LighthouseManager sharedInstance] hasRequestedPermission];
-	
+
+### Requesting Push Notification Permission
+Likewise with location permission above you can request push notification permission from a user with the following methods. If your app has already requested permission this will operate silently in the background, it is still important to run them though if you want to receive push notifications for campaigns from the Lighthouse API.
+
+Put this after Lighthouse has been configured and launched, you can request immediately at startup or later after you have explained to the user that you are about to ask permission.
+
+	[[LighthouseManager sharedInstance] requestPushNotifications];
+
+You will also need to add the following methods in your AppDelegate so Lighthouse can respond to registeration and notification events.
+
+	- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+		[[LighthouseManager sharedInstance] didReceiveRemoteNotification:userInfo];
+	}
+
+	- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+		[[LighthouseManager sharedInstance] didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+	}
+
+	- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+		[[LighthouseManager sharedInstance] didRegisterForRemoteNotificationsWithDeviceToken:nil];
+	}
+
 ## Changelog
+
+##### 1.1.0
+
++ Added push notification permission support.
++ Added enable/disable transmission to Lighthouse API support.
++ README updated to explain above additions. Also added "Build Settings" in installation instructions.
 
 ##### 1.0.0
 
@@ -133,4 +193,4 @@ You can also check whether permission has been requested previously using:
 
 ### Questions & Support
 
-If you have any questions, bugs, or suggestions, please email them to [team@lighthousebeacon.com.au](mailto:team@lighthousebeacon.com.au). We'd love to hear your feedback and ideas!
+If you have any questions, bugs, or suggestions, please email them to [team@lighthousebeacon.io](mailto:team@lighthousebeacon.io). We'd love to hear your feedback and ideas!

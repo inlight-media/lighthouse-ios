@@ -23,6 +23,9 @@
     // Enable NSNotification events to be transmitted on enter/exit/range (optional)
     [LighthouseManager enableNotifications];
 
+	// Disable transmissions (you could do this for development or if a user doesnt want their data collected)
+    //[LighthouseManager disableTransmission];
+
     // Configure the manager using Lighthouse keys
     [[LighthouseManager sharedInstance] configure:@{
         @"appId": @"53292c768d8e1e0b5a00000b",
@@ -38,9 +41,15 @@
     // Request permission (you can do this whenever you like - it will ask user for location permission - possibly you want to wait until they reach a certain section of your app)
 	// To fire immediately
 	// [[LighthouseManager sharedInstance] requestPermission];
-	// In this example we have delayed the permission request by 15 seconds
-	[NSTimer scheduledTimerWithTimeInterval:15 target:[LighthouseManager sharedInstance] selector:@selector(requestPermission) userInfo:nil repeats:NO];
+	// In this example we have delayed the permission request by 5 seconds
+	[NSTimer scheduledTimerWithTimeInterval:5 target:[LighthouseManager sharedInstance] selector:@selector(requestPermission) userInfo:nil repeats:NO];
 
+
+    // Request push notification permission (you can do this whenever you like - it will ask user for push notification permission - possibly you want to wait until they reach a certain section of your app)
+	// To fire immediately
+	// [[LighthouseManager sharedInstance] requestPushNotifications];
+	// In this example we have delayed the permission request by 15 seconds
+	[NSTimer scheduledTimerWithTimeInterval:15 target:[LighthouseManager sharedInstance] selector:@selector(requestPushNotifications) userInfo:nil repeats:NO];
 	
 	// Listen to notifications from Lighthouse
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBeacon:) name:@"LighthouseDidEnterBeacon" object:nil];
@@ -80,6 +89,23 @@
 
 - (void)didRangeBeacon:(NSNotification *)notification {
 	NSLog(@"didRangeBeacon %@", notification.userInfo);
+}
+
+#pragma mark - Push Notifications
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+	NSLog(@"application:didReceiveRemoteNotification");
+	[[LighthouseManager sharedInstance] didReceiveRemoteNotification:userInfo];
+}
+
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+	NSLog(@"didRegisterForRemoteNotificationsWithDeviceToken: %@", deviceToken);
+	[[LighthouseManager sharedInstance] didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+}
+
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+	NSLog(@"didFailToRegisterForRemoteNotificationsWithError %@", err);
+	[[LighthouseManager sharedInstance] didRegisterForRemoteNotificationsWithDeviceToken:nil];
 }
 
 @end

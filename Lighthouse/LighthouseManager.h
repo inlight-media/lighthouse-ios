@@ -11,6 +11,7 @@
 
 @interface LighthouseManager : NSObject <CLLocationManagerDelegate, CBCentralManagerDelegate> {
 	BOOL _active;
+	BOOL _launched;
 	BOOL _hasRequestedPermission;
 	CLLocationManager *_location;
 	CBCentralManager *_bluetooth;
@@ -51,9 +52,20 @@
 + (void)enableNotifications;
 + (BOOL)isNotificationsEnabled;
 
+#pragma mark - Transmission
++ (void)disableTransmission;
++ (void)enableTransmission;
++ (BOOL)isTransmissionEnabled;
+
 #pragma mark - List
 - (NSDictionary *)beacons;
 - (NSDictionary *)properties;
 - (NSDictionary *)config;
+
+#pragma mark - Push Notification Services
+- (void)requestPushNotifications;
+- (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
+- (NSString *)pushNotificationToken;
+- (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
 
 @end
