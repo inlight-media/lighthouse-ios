@@ -57,6 +57,11 @@
 + (void)enableTransmission;
 + (BOOL)isTransmissionEnabled;
 
+#pragma mark - Production
++ (void)disableProduction;
++ (void)enableProduction;
++ (BOOL)isProductionEnabled;
+
 #pragma mark - List
 - (NSDictionary *)beacons;
 - (NSDictionary *)properties;

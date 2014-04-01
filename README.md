@@ -148,6 +148,17 @@ Just put this at any point before you use LighthouseManager. A good place is in 
 To disable transmission to the Ligthhouse server, simply call:
 
 	[LighthouseManager disableTransmission];
+	
+### Production Mode
+By default the Lighthouse SDK operates in Development mode. Every analytic sent to Lighthouse API will record which mode the device was in when it was sent. This means that we can send push notifications using the correct certificates for the device. Also in future we'll investigate how you can filter and test your analytics more by segregating development data from your production data.
+
+	[LighthouseManager enableProduction];
+
+Just put this at any point before you use LighthouseManager. A good place is in your application delegate.
+
+To put it back into development mode, you can disable production at any time (by default production is disabled):
+
+	[LighthouseManager disableProduction];
 
 ### Requesting Permission
 You've all had that experience when you launch an app for the first time and get bombarded with permission requests for notifications, location, movement, microphones - the list goes on. In some situations you may wish to avoid this and only request location permission at a relevant time in the user experience. We added the ```requestPermission``` method for this reason. Lighthouse won't work until permission has been requested (and accepted by the user).
@@ -180,6 +191,10 @@ You will also need to add the following methods in your AppDelegate so Lighthous
 	}
 
 ## Changelog
+
+##### 1.1.3
+
++ Added ability to switch between development and production (particularly helpful for push notifications)
 
 ##### 1.1.2
 

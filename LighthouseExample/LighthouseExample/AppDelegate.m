@@ -25,6 +25,9 @@
 
 	// Disable transmissions (you could do this for development or if a user doesnt want their data collected)
     //[LighthouseManager disableTransmission];
+	
+    // Enable production when you are ready to deploy, you can also use Preprocessor Macros to control this for instance.
+    //[LighthouseManager enableProduction];
 
     // Configure the manager using Lighthouse keys
     [[LighthouseManager sharedInstance] configure:@{
