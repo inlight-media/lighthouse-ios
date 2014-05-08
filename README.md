@@ -38,7 +38,12 @@ You'll need to import the LighthouseManager.h header into the files that contain
 
 ### Add Background Modes
 In your application plist file (often called "ApplicationName-Info.plist") add a row for
-"Required background modes" of type Array. It then needs "App registers for location updates" and "App communicates using CoreBluetooth". Thesea are needed to receive the background beacon notifications
+"Required background modes" of type Array. It then needs:
+
+- "App registers for location updates"
+- "App communicates using CoreBluetooth"
+
+These are needed to receive the background beacon notifications.
 
 ### Compile
 Try and compile. It should work!
@@ -148,7 +153,7 @@ Just put this at any point before you use LighthouseManager. A good place is in 
 To disable transmission to the Ligthhouse server, simply call:
 
 	[LighthouseManager disableTransmission];
-	
+
 ### Production Mode
 By default the Lighthouse SDK operates in Development mode. Every analytic sent to Lighthouse API will record which mode the device was in when it was sent. This means that we can send push notifications using the correct certificates for the device. Also in future we'll investigate how you can filter and test your analytics more by segregating development data from your production data.
 
@@ -178,6 +183,18 @@ Put this after Lighthouse has been configured and launched, you can request imme
 
 You will also need to add the following methods in your AppDelegate so Lighthouse can respond to registeration and notification events.
 
+	- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+		...
+
+		// If we have a notification in the payload get it out of launch options
+		NSDictionary *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+		if (notification) {
+			[[LighthouseManager sharedInstance] didReceiveRemoteNotification:notification];
+		}
+
+		...
+	}
+
 	- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
 		[[LighthouseManager sharedInstance] didReceiveRemoteNotification:userInfo];
 	}
@@ -190,7 +207,43 @@ You will also need to add the following methods in your AppDelegate so Lighthous
 		[[LighthouseManager sharedInstance] didRegisterForRemoteNotificationsWithDeviceToken:nil];
 	}
 
+You can also view an array of all notifications received (you could for instance pull the last object off that array and show to users)
+
+	[[LighthouseManager sharedInstance] notifications]
+
+It can also be helpful to have access to the devices push notification token. You can use this in the Admin Integration page to test your push notifications certificates. Just copy/paste the value into the Test Push Notification section and hit send.
+
+	[[LighthouseManager sharedInstance] pushNotificationToken]
+
+### Generating Push Notification Certificates for Admin Portal
+
+Ther are a few steps involved in getting push notification certificates from Apple Developer Portal into a usable format for the application. This [push notification tutorial](http://www.raywenderlich.com/32960/apple-push-notification-services-in-ios-6-tutorial-part-1) is an excellent resource to guide through the process of generating Certificate Signing Requests, App IDs and SSL Certs. After you've got your certificate from that process, use the following commands (which are based off the ones mentioned in that tutorial) to get the certificate and your private key into the correct format for the Lighthouse portal.
+
+Using the aps_development.cer certificate downloaded from Apple we convert it to PEM format.
+
+	openssl x509 -in aps_development.cer -inform der -out development-cert.pem
+
+Now that we have development-private-key.p12 we convert it to PEM format.
+
+	openssl pkcs12 -nocerts -out development-key-enc.pem -in development-private-key.p12
+
+The key is encrypted so we have to remove this for lighthouse to be able to send the notification.
+
+	openssl rsa -in development-key-enc.pem -out development-key.pem
+
+Test it is working by connecting to Apple's sandbox environment using the newly created cert and key.
+
+	openssl s_client -connect gateway.sandbox.push.apple.com:2195 -cert development-cert.pem -key development-key.pem
+
+If all is working, open the cert (development-cert.pem) and key (development-key.pem) files and copy their contents into the Integration page on [admin.lighthousebeacon.com.au](http://admin.lighthousebeacon.com.au).
+
+You can now use the Test Push Notification section to send a test notification to your device. You can also use the same process for generating your production keys (replacing "development" in filenames with "production")
+
 ## Changelog
+
+##### 1.1.4
+
++ Updated push notification code for receiving notifications and reading them within the application
 
 ##### 1.1.3
 

@@ -16,7 +16,7 @@
 	[self.window setRootViewController:[[UIViewController alloc] init]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-		
+
 	// Enable logging (optional)
     //[LighthouseManager enableLogging];
 
@@ -25,7 +25,7 @@
 
 	// Disable transmissions (you could do this for development or if a user doesnt want their data collected)
     //[LighthouseManager disableTransmission];
-	
+
     // Enable production when you are ready to deploy, you can also use Preprocessor Macros to control this for instance.
     //[LighthouseManager enableProduction];
 
@@ -53,12 +53,18 @@
 	// [[LighthouseManager sharedInstance] requestPushNotifications];
 	// In this example we have delayed the permission request by 15 seconds
 	[NSTimer scheduledTimerWithTimeInterval:15 target:[LighthouseManager sharedInstance] selector:@selector(requestPushNotifications) userInfo:nil repeats:NO];
-	
+
 	// Listen to notifications from Lighthouse
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBeacon:) name:@"LighthouseDidEnterBeacon" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didExitBeacon:) name:@"LighthouseDidExitBeacon" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRangeBeacon:) name:@"LighthouseDidRangeBeacon" object:nil];
-	
+
+	// If we have a notification in the payload get it out of launch options
+	NSDictionary *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+	if (notification) {
+		[[LighthouseManager sharedInstance] didReceiveRemoteNotification:notification];
+	}
+
     return YES;
 }
 

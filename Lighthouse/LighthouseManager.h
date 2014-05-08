@@ -21,6 +21,7 @@
 	NSMutableDictionary *_config;
 	NSTimer *_updateTimer;
 	NSMutableArray *_regions;
+	NSMutableDictionary *_activity;
 }
 
 + (LighthouseManager *)sharedInstance;
@@ -72,5 +73,9 @@
 - (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
 - (NSString *)pushNotificationToken;
 - (void)didReceiveRemoteNotification:(NSDictionary *)userInfo;
+- (NSArray *)notifications;
+
+#pragma mark - Campaigns
+- (void)campaign:(NSString *)campaignId;
 
 @end
