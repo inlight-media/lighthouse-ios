@@ -9,6 +9,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 
+typedef void (^SubscribeBlock)(id self, NSDictionary *data);
+
 @interface LighthouseManager : NSObject <CLLocationManagerDelegate, CBCentralManagerDelegate> {
 	BOOL _active;
 	BOOL _launched;
@@ -48,10 +50,11 @@
 + (void)enableLogging;
 + (BOOL)isLoggingEnabled;
 
-#pragma mark - Notifications
-+ (void)disableNotifications;
-+ (void)enableNotifications;
-+ (BOOL)isNotificationsEnabled;
+#pragma mark - Events
+- (NSString *)subscribe:(NSString *)event observer:(id)observer selector:(SEL)selector;
+- (NSString *)subscribe:(NSString *)event observer:(id)observer on:(SubscribeBlock)block;
+- (void)unsubscribe:(NSString *)subscribeKey;
+- (void)removeAll:(id)observer;
 
 #pragma mark - Transmission
 + (void)disableTransmission;
@@ -76,6 +79,6 @@
 - (NSArray *)notifications;
 
 #pragma mark - Campaigns
-- (void)campaign:(NSString *)campaignId;
+- (void)campaign:(NSDictionary *)notification;
 
 @end

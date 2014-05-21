@@ -64,9 +64,6 @@ Register the LighthouseManager with your Application ID and access keys. The rec
 		// Enable logging (optional)
 		[LighthouseManager enableLogging];
 
-		// Enable NSNotification events to be transmitted on enter/exit/range (optional)
-		[LighthouseManager enableNotifications];
-
 		// Configure the manager using Lighthouse keys
 		[[LighthouseManager sharedInstance] configure:@{
 			@"appId": @"your_app_id",
@@ -112,36 +109,98 @@ To disable logging (by default it is disabled), simply call:
 
 	[LighthouseManager disableLogging];
 
-### Notifications / Events
-The Lighthouse iOS SDK doesn't keep all the beacon events for itself, after all sharing is caring. If enabled the SDK sends out NSNotificationCenter events when ever a user enters, exits or ranges (usually every second when within a beacon). These notifications contain a NSDictionary full of useful information such as the beacon ids, distance, accuracy, user's compass direction, etc.
-
-	[LighthouseManager enableNotifications];
-
-Just put this at any point in your codebase. A good place is in your application delegate.
-
-To disable notifications (by default it is disabled), simply call:
-
-	[LighthouseManager disableNotifications];
+### Events
+The Lighthouse iOS SDK doesn't keep all the beacon events for itself, after all sharing is caring. Using the SDK you can subscribe to events such as when a user enters, exits or ranges (usually every second when within a beacon). These events contain a NSDictionary full of useful information such as the beacon ids, distance, accuracy, user's compass direction, etc.
 
 You can then listen to these NSNotifications using the following example commands:
 
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBeacon:) name:@"LighthouseDidEnterBeacon" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didExitBeacon:) name:@"LighthouseDidExitBeacon" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRangeBeacon:) name:@"LighthouseDidRangeBeacon" object:nil];
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidEnterBeacon" observer:self selector:@selector(didEnterBeacon:)];
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidExitBeacon" observer:self selector:@selector(didExitBeacon:)];
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidRangeBeacon" observer:self selector:@selector(didRangeBeacon:)];
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidReceiveCampaign" observer:self selector:@selector(didReceiveCampaign:)];
 
 	#pragma mark - Notification Handers
 
-	- (void)didEnterBeacon:(NSNotification *)notification {
-		NSLog(@"didEnterBeacon %@", notification.userInfo);
+	- (void)didEnterBeacon:(NSDictionary *)data {
+		NSLog(@"didEnterBeacon %@", data);
 	}
 
-	- (void)didExitBeacon:(NSNotification *)notification {
-		NSLog(@"didExitBeacon %@", notification.userInfo);
+	- (void)didExitBeacon:(NSDictionary *)data {
+		NSLog(@"didExitBeacon %@", data);
 	}
 
-	- (void)didRangeBeacon:(NSNotification *)notification {
-		NSLog(@"didRangeBeacon %@", notification.userInfo);
+	- (void)didRangeBeacon:(NSDictionary *)data {
+		NSLog(@"didRangeBeacon %@", data);
 	}
+
+	- (void)didReceiveCampaign:(NSDictionary *)data {
+		NSLog(@"didReceiveCampaign %@", data);
+	}
+
+In every observer's dealloc you MUST run the following to prevent leaking memory and crashes. Basically you are saying to Lighthouse that you want to unsubscribe this object from all the events it previously subscribed to.
+
+	- (void)dealloc {
+		[[LighthouseManager sharedInstance] removeAll:self];
+	}
+
+You can also unsubscribe to any event at any time by using the UUID returned from the subscribe method. See below:
+
+	NSString *subscribeKeyForEnterEvent = [[LighthouseManager sharedInstance] subscribe:@"LighthouseDidEnterBeacon" observer:self selector:@selector(didEnterBeacon:)];
+
+	[[LighthouseManager sharedInstance] unsubscribe:subscribeKeyForEnterEvent];
+
+NOTE: The old method of using NSNotification observing prior to 1.1.5 is no longer available. We hope this new method is more useful and give you more control with events.
+
+You'll also see the "LighthouseDidReceiveCampaign" event has been added in 1.1.5. This event is triggered whenever a request to get more detail about a campaign is made. More details in the next "Detailed Campaign Data" section.
+
+### Detailed Campaign Data
+In 1.1.5 we added the ability to retrieve detailed campaign data that is too large to fit in the 256 byte limit of a push notification. This is useful if you are using the "Meta" field in the Advanced Fields section of campaign creation. In future you will also use this method for getting images, videos, rules etc from the API. To get detailed campaign data you need to give Lighthouse context of the notification to get the corresponding campaign data for.
+
+	NSDictionary *mostRecentNotification = [[LighthouseManager sharedInstance] notifications][0];
+	[[LighthouseManager sharedInstance] campaign:mostRecentNotification];
+
+This will make an API call to the Lighthouse server. On completion it will use the "LighthouseDidReceiveCampaign" event so you'll need to subscribe to it.
+
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidReceiveCampaign" observer:self selector:@selector(didReceiveCampaign:)];
+
+	....
+
+	- (void)didReceiveCampaign:(NSDictionary *)data {
+		NSLog(@"didReceiveCampaign %@", data);
+	}
+
+An example of the data returned is below. You'll see it includes the campaign data as well as the original notification so you can determine which notification was used as context in retrieving the campaign.
+
+	{
+		campaign: {
+			_id: '537c314c43083e7358000022',
+			meta: {
+				foo: 'bar'
+			}
+		},
+		notification: {
+			device: '576C3487-45D2-487D-95AF-4241C1F57671',
+			mode: 'development',
+			notification: {
+				aps: {
+					alert: 'Welcome to the Railway Hotel. Enjoy $5 Pints for the next hour',
+					badge: 1,
+					sound: 'default'
+				},
+				d: {
+					a: '537c35bc43083e7358000034',
+					c: '537c314c43083e7358000022'
+				},
+				s: 'lh'
+			},
+			properties: {},
+			state: 'Active',
+			timestamp: '1400649148.683397',
+			timezoneOffset: 36000
+		}
+	}
+
+NOTE: If valid JSON data is added in the 'meta' field of admin campaign console then we will automatically parse it for transmission down to the iOS app so you get an NSDictionary of values. However if its not valid and our JSON parser can't parse it then a string will be sent. You should check the meta type as to whether it is an NSString or NSDictionary before assuming it's a NSDictionary otherwise your application could run into a bug/crash.
 
 ### Transmission
 There are times when you will want to leverage the Lighthouse SDK to easily access iBeacon events but you may not want it to transmit data to Lighthouse API. This could be the case during development or possibly if a user does not want their movements tracked. You can use the following methods to control whether the SDK transmits data to the server. By default it is enabled.
@@ -240,6 +299,11 @@ If all is working, open the cert (development-cert.pem) and key (development-key
 You can now use the Test Push Notification section to send a test notification to your device. You can also use the same process for generating your production keys (replacing "development" in filenames with "production")
 
 ## Changelog
+
+##### 1.1.5
+
++ Removed use of NSNotifications for communicating events, instead a subscribe/unsubscribe system has been implement
++ Added a "campaign" method to retrieve detailed information about a campaign. This is needed to access advanced fields such as "meta" which are too large to send in a 256 byte push notification.
 
 ##### 1.1.4
 

@@ -20,9 +20,6 @@
 	// Enable logging (optional)
     //[LighthouseManager enableLogging];
 
-    // Enable NSNotification events to be transmitted on enter/exit/range (optional)
-    [LighthouseManager enableNotifications];
-
 	// Disable transmissions (you could do this for development or if a user doesnt want their data collected)
     //[LighthouseManager disableTransmission];
 
@@ -55,9 +52,10 @@
 	[NSTimer scheduledTimerWithTimeInterval:15 target:[LighthouseManager sharedInstance] selector:@selector(requestPushNotifications) userInfo:nil repeats:NO];
 
 	// Listen to notifications from Lighthouse
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBeacon:) name:@"LighthouseDidEnterBeacon" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didExitBeacon:) name:@"LighthouseDidExitBeacon" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRangeBeacon:) name:@"LighthouseDidRangeBeacon" object:nil];
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidEnterBeacon" observer:self selector:@selector(didEnterBeacon:)];
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidExitBeacon" observer:self selector:@selector(didExitBeacon:)];
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidRangeBeacon" observer:self selector:@selector(didRangeBeacon:)];
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidReceiveCampaign" observer:self selector:@selector(didReceiveCampaign:)];
 
 	// If we have a notification in the payload get it out of launch options
 	NSDictionary *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -88,16 +86,20 @@
 
 #pragma mark - Notification Handers
 
-- (void)didEnterBeacon:(NSNotification *)notification {
-	NSLog(@"didEnterBeacon %@", notification.userInfo);
+- (void)didEnterBeacon:(NSDictionary *)data {
+	NSLog(@"didEnterBeacon %@", data);
 }
 
-- (void)didExitBeacon:(NSNotification *)notification {
-	NSLog(@"didExitBeacon %@", notification.userInfo);
+- (void)didExitBeacon:(NSDictionary *)data {
+	NSLog(@"didExitBeacon %@", data);
 }
 
-- (void)didRangeBeacon:(NSNotification *)notification {
-	NSLog(@"didRangeBeacon %@", notification.userInfo);
+- (void)didRangeBeacon:(NSDictionary *)data {
+	NSLog(@"didRangeBeacon %@", data);
+}
+
+- (void)didReceiveCampaign:(NSDictionary *)data {
+	NSLog(@"didReceiveCampaign %@", data);
 }
 
 #pragma mark - Push Notifications
