@@ -117,6 +117,7 @@ You can then listen to these NSNotifications using the following example command
 	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidEnterBeacon" observer:self selector:@selector(didEnterBeacon:)];
 	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidExitBeacon" observer:self selector:@selector(didExitBeacon:)];
 	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidRangeBeacon" observer:self selector:@selector(didRangeBeacon:)];
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidReceiveNotification" observer:self selector:@selector(didReceiveNotification:)];
 	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidReceiveCampaign" observer:self selector:@selector(didReceiveCampaign:)];
 
 	#pragma mark - Notification Handers
@@ -133,8 +134,14 @@ You can then listen to these NSNotifications using the following example command
 		NSLog(@"didRangeBeacon %@", data);
 	}
 
+	- (void)didReceiveNotification:(NSDictionary *)data {
+		NSLog(@"didReceiveNotification %@", data);
+		// You could listen to this event and show a loading indicator while you make a request for detailed campaign data
+	}
+
 	- (void)didReceiveCampaign:(NSDictionary *)data {
 		NSLog(@"didReceiveCampaign %@", data);
+		// The reponse for a request for detailed campaign data
 	}
 
 In every observer's dealloc you MUST run the following to prevent leaking memory and crashes. Basically you are saying to Lighthouse that you want to unsubscribe this object from all the events it previously subscribed to.
@@ -152,6 +159,48 @@ You can also unsubscribe to any event at any time by using the UUID returned fro
 NOTE: The old method of using NSNotification observing prior to 1.1.5 is no longer available. We hope this new method is more useful and give you more control with events.
 
 You'll also see the "LighthouseDidReceiveCampaign" event has been added in 1.1.5. This event is triggered whenever a request to get more detail about a campaign is made. More details in the next "Detailed Campaign Data" section.
+
+### Event Payloads
+
+This section outlines the NSDictionary structure of the data parameter passed from the events you subscribe to.
+The following three events have the same payload structure: LighthouseDidEnterBeacon, LighthouseDidExitBeacon, LighthouseDidRangeBeacon
+
+	@{
+		@"properties": NSDictionary, // These are your custom set properties
+		@"device": NSString, // Derived from [[[UIDevice currentDevice] identifierForVendor] UUIDString]
+		@"key": NSString, // String of uuid-major-minor all joined together
+		@"uuid": NSString, // String of uuid
+		@"major": NSString, // String of major
+		@"minor": NSString, // String of minot
+		@"direction": CLLocationDirection (double), // Derived from CLLocationDirection trueHeading,
+		@"moving": NSNumber, // Boolean in NSNumber format as to whether the device is stationary or if the user is moving (ie, walking). In testing, distance becomes more accurate if the device is moving.
+		@"distance": NSNumber, // Average meters from beacon from the last 5 readings (is used as approximate guide only, beacon accuracy isn't very reliable and based on environment). Sometimes this value can appear as a negative number which should be discarded as it means an accurate distance couldn't be determined. Derived from CLBeacon accuracy. This value is very unreliable, we wouldn't recommend depending on it.
+		@"mode": NSString, // Articulates whether you are in production or development mode. Either @"production" or @"development",
+		@"state": NSString, // Based on [[UIApplication sharedApplication] applicationState]. Value is either @"Active", @"Inactive", @"Background",
+		@"timestamp": NSNumber, // Under the hood it is @([[NSDate date] timeIntervalSince1970])
+	}
+
+The LighthouseDidReceiveNotification event has this structure:
+
+	@{
+		@"properties": NSDictionary, // These are your custom set properties
+		@"device": NSString, // Derived from [[[UIDevice currentDevice] identifierForVendor] UUIDString]
+		@"state": NSString, // Based on [[UIApplication sharedApplication] applicationState]. Value is either @"Active", @"Inactive", @"Background",
+		@"mode": NSString, // Articulates whether you are in production or development mode. Either @"production" or @"development",
+		@"notification": NSDictionary, // userInfo dictionary that came with push notification
+		@"timezoneOffset": NSNumber, // Under the hood it is @([[NSTimeZone systemTimeZone] secondsFromGMT]),
+		@"timestamp": NSNumber, // Under the hood it is @([[NSDate date] timeIntervalSince1970])
+	}
+
+The LighthouseDidReceiveCampaign event has the following structure. More fields will be added to the campaign dictionary in the future as the campaigns become more advanced.
+
+	@{
+		@"notification": NSDictionary, // Whole dictionary of the one described above in LighthouseDidReceiveNotification
+		@"campaign": @{
+			@"_id": NSString, // campaign Id from the Lighthouse Backend
+			@"meta": Either NSDictionary or NSString based on whether vaild json was entered in the campaign creation stage. It it can parse it as JSON it will be NSDictionary, but if it can't it just spits out the NSString.
+		}
+	}
 
 ### Detailed Campaign Data
 In 1.1.5 we added the ability to retrieve detailed campaign data that is too large to fit in the 256 byte limit of a push notification. This is useful if you are using the "Meta" field in the Advanced Fields section of campaign creation. In future you will also use this method for getting images, videos, rules etc from the API. To get detailed campaign data you need to give Lighthouse context of the notification to get the corresponding campaign data for.
@@ -297,6 +346,12 @@ Test it is working by connecting to Apple's sandbox environment using the newly 
 If all is working, open the cert (development-cert.pem) and key (development-key.pem) files and copy their contents into the Integration page on [admin.lighthousebeacon.com.au](http://admin.lighthousebeacon.com.au).
 
 You can now use the Test Push Notification section to send a test notification to your device. You can also use the same process for generating your production keys (replacing "development" in filenames with "production")
+
+## FAQs
+
+What is the default behaviour when a beacon is detected when the app is in the foreground? Can this be customised?
+
+If a campaign is triggered then a push notification will be sent to the device, but because the app is open it won't make a noise or display an alert, the AppDelegate "didReceiveRemoteNotification" code will still trigger though so you can handle this situation. If no campaign is triggered for the beacon and the app is in the foreground then it will still fire the events such as "LighthouseDidEnterBeacon", "LighthouseDidExitBeacon", "LighthouseDidRangeBeacon" if you are subscribed to them.
 
 ## Changelog
 

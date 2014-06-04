@@ -55,6 +55,7 @@
 	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidEnterBeacon" observer:self selector:@selector(didEnterBeacon:)];
 	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidExitBeacon" observer:self selector:@selector(didExitBeacon:)];
 	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidRangeBeacon" observer:self selector:@selector(didRangeBeacon:)];
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidReceiveNotification" observer:self selector:@selector(didReceiveNotification:)];
 	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidReceiveCampaign" observer:self selector:@selector(didReceiveCampaign:)];
 
 	// If we have a notification in the payload get it out of launch options
@@ -96,6 +97,12 @@
 
 - (void)didRangeBeacon:(NSDictionary *)data {
 	NSLog(@"didRangeBeacon %@", data);
+}
+
+- (void)didReceiveNotification:(NSDictionary *)data {
+	NSLog(@"didReceiveNotification %@", data);
+	// Retrieve detailed campaign data for the notification. This will perform async and then fire LighthouseDidReceiveCampaign event.
+	[[LighthouseManager sharedInstance] campaign:data];
 }
 
 - (void)didReceiveCampaign:(NSDictionary *)data {
