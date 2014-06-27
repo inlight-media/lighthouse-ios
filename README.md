@@ -251,6 +251,31 @@ An example of the data returned is below. You'll see it includes the campaign da
 
 NOTE: If valid JSON data is added in the 'meta' field of admin campaign console then we will automatically parse it for transmission down to the iOS app so you get an NSDictionary of values. However if its not valid and our JSON parser can't parse it then a string will be sent. You should check the meta type as to whether it is an NSString or NSDictionary before assuming it's a NSDictionary otherwise your application could run into a bug/crash.
 
+### Custom Properties
+The Lighthouse SDK gives you the ability to assign custom properties about the particular user's device. For instance you can record the gender, age group, user preferences, and much more which will then be stored against that device and synced to the Lighthouse API. We've added this feature so that future advancements of the Lighthouse API will allow you to segment analytics based on these custom properties and also create campaigns that only target users with specific properties. These are not yet available, however its a good idea to start capturing this data from day one so you can access the full benefits when these features are launched.
+
+To get started you have the following methods available to you
+
+You can view all the properties you have assigned:
+
+	[[LighthouseManager sharedInstance] properties];
+
+You can set properties all at once using a batch method:
+
+	[[LighthouseManager sharedInstance] setProperties:@{
+		@"age": @(30),
+		@"gender": @"female",
+		@"likes": @[@"music", @"fashion"]
+	}];
+
+You can set individual properties as well. For instance this example will overwrite the gender property that was already set in the previous method:
+
+	[[LighthouseManager sharedInstance] addProperty:@"gender" value:@"male"];
+
+You can also remove properties:
+
+	[[LighthouseManager sharedInstance] removeProperty:@"gender"];
+
 ### Transmission
 There are times when you will want to leverage the Lighthouse SDK to easily access iBeacon events but you may not want it to transmit data to Lighthouse API. This could be the case during development or possibly if a user does not want their movements tracked. You can use the following methods to control whether the SDK transmits data to the server. By default it is enabled.
 
