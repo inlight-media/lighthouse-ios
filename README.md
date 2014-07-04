@@ -69,8 +69,7 @@ Register the LighthouseManager with your Application ID and access keys. The rec
 			@"appId": @"your_app_id",
 			@"appKey": @"your_app_key",
 			@"appToken": @"your_app_token",
-			@"appVersion": @"your_app_version", // optional
-			@"uuids": @[@"beacon_uuids_to_monitor"]
+			@"appVersion": @"your_app_version" // optional
 		}];
 
 		// Start monitoring
@@ -251,6 +250,17 @@ An example of the data returned is below. You'll see it includes the campaign da
 
 NOTE: If valid JSON data is added in the 'meta' field of admin campaign console then we will automatically parse it for transmission down to the iOS app so you get an NSDictionary of values. However if its not valid and our JSON parser can't parse it then a string will be sent. You should check the meta type as to whether it is an NSString or NSDictionary before assuming it's a NSDictionary otherwise your application could run into a bug/crash.
 
+### Campaign Actions
+Often after you've displayed a campaign to a user you'd like to record that they performed an action on that campaign (ie, clicked a redeem button). The LighthouseManager class has a method for this instance. By transmitting that an action was performed on a campaign you can then view the results on the Lighthouse Analtytics dashboard. Here is an example:
+
+	// Get the last notification
+	NSDictionary *notification = [[[LighthouseManager sharedInstance] notifications] lastObject];
+	/
+	/ Tell the server that it was actioned by the user
+	[[LighthouseManager sharedInstance] campaignActioned:notification];
+
+By calling this method the SDK will subsequently emit "LighthouseDidActionCampaign" event with the notification dictionary as its data. You can then listen into this event from anywhere in your app using the same subscription process as the Events listed above.
+
 ### Custom Properties
 The Lighthouse SDK gives you the ability to assign custom properties about the particular user's device. For instance you can record the gender, age group, user preferences, and much more which will then be stored against that device and synced to the Lighthouse API. We've added this feature so that future advancements of the Lighthouse API will allow you to segment analytics based on these custom properties and also create campaigns that only target users with specific properties. These are not yet available, however its a good idea to start capturing this data from day one so you can access the full benefits when these features are launched.
 
@@ -379,6 +389,13 @@ What is the default behaviour when a beacon is detected when the app is in the f
 If a campaign is triggered then a push notification will be sent to the device, but because the app is open it won't make a noise or display an alert, the AppDelegate "didReceiveRemoteNotification" code will still trigger though so you can handle this situation. If no campaign is triggered for the beacon and the app is in the foreground then it will still fire the events such as "LighthouseDidEnterBeacon", "LighthouseDidExitBeacon", "LighthouseDidRangeBeacon" if you are subscribed to them.
 
 ## Changelog
+
+##### 1.2
+
++ Added ability to send campaign action analytic using "campaignActioned:". See "Campaign Actions" section above.
++ You no longer specify uuids in the configuration stage, they are now automatically downloaded from the API on app launch. This means you can change which beacons you monitor remotely, no more hardcoding.
++ Additionally we've added the functionality for you to be able to disable the whole Lighthouse SDK remotely and for it to be done on certain app versions or SDK versions. This will enable you to manage your apps remotely if you no longer want the SDK to run within certain versions of your app. At the moment there is no GUI to do this yourself, please contact us at team@lighthousebeacon.io if you'd like this to take place.
++ Updated example project
 
 ##### 1.1.5
 

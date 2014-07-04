@@ -15,6 +15,9 @@ typedef void (^SubscribeBlock)(id self, NSDictionary *data);
 	BOOL _active;
 	BOOL _launched;
 	BOOL _hasRequestedPermission;
+	NSNumber *_enabled;
+	NSDate *_lastCheckedEnabled;
+	NSArray *_uuids;
 	CLLocationManager *_location;
 	CBCentralManager *_bluetooth;
 	NSMutableDictionary *_beacons;
@@ -80,5 +83,6 @@ typedef void (^SubscribeBlock)(id self, NSDictionary *data);
 
 #pragma mark - Campaigns
 - (void)campaign:(NSDictionary *)notification;
+- (void)campaignActioned:(NSDictionary *)notification;
 
 @end

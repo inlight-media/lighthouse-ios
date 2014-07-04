@@ -18,7 +18,7 @@
     [self.window makeKeyAndVisible];
 
 	// Enable logging (optional)
-    //[LighthouseManager enableLogging];
+    [LighthouseManager enableLogging];
 
 	// Disable transmissions (you could do this for development or if a user doesnt want their data collected)
     //[LighthouseManager disableTransmission];
@@ -28,11 +28,10 @@
 
     // Configure the manager using Lighthouse keys
     [[LighthouseManager sharedInstance] configure:@{
-        @"appId": @"53292c768d8e1e0b5a00000b",
-		@"appKey": @"78a8956f40c43603364783721cd261c74285bf9e",
-		@"appToken": @"8c9c72a2e45aa7e80af6cac981d87d9cf610906f",
-		@"appVersion": @"iPhone-1.0",
-		@"uuids": @[@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"]
+        @"appId": @"533bb440d3384b8a6a000012",
+		@"appKey": @"047b62e5346236896c2eca2e8407f1f59cde7646",
+		@"appToken": @"7cdfd231f223e75e8cf4e927ccc0be4c2031598f",
+		@"appVersion": @"iPhone-1.0"
     }];
 
     // Start monitoring
@@ -107,6 +106,15 @@
 
 - (void)didReceiveCampaign:(NSDictionary *)data {
 	NSLog(@"didReceiveCampaign %@", data);
+
+	// You can now show a UIView or other UI element showing the user the campaign.
+
+	// You can then trigger a "campaign action" when the user clicks a button for instance to record how many people
+	// have see and performed an action on the campaign. For the moment we just wait 15 seconds before triggering
+	[NSTimer scheduledTimerWithTimeInterval:15 target:[LighthouseManager sharedInstance] selector:@selector(campaignActioned:) userInfo:data repeats:NO];
+	
+	NSDictionary *notification = [[[LighthouseManager sharedInstance] notifications] lastObject];
+	[[LighthouseManager sharedInstance] campaignActioned:notification];
 }
 
 #pragma mark - Push Notifications
