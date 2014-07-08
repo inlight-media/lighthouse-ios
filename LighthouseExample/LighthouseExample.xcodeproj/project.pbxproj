@@ -14,9 +14,6 @@
 		B523CA9A18E2A2EA00DECAA3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B523CA9918E2A2EA00DECAA3 /* main.m */; };
 		B523CA9E18E2A2EA00DECAA3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B523CA9D18E2A2EA00DECAA3 /* AppDelegate.m */; };
 		B523CAA018E2A2EA00DECAA3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B523CA9F18E2A2EA00DECAA3 /* Images.xcassets */; };
-		B523CAC318E2A38A00DECAA3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B523CAC218E2A38A00DECAA3 /* CoreLocation.framework */; };
-		B523CAC518E2A39000DECAA3 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B523CAC418E2A39000DECAA3 /* CoreBluetooth.framework */; };
-		B523CAC718E2A39600DECAA3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B523CAC618E2A39600DECAA3 /* CoreMotion.framework */; };
 		B523CAC918E2A47D00DECAA3 /* libLighthouse.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B523CAC818E2A47D00DECAA3 /* libLighthouse.a */; };
 /* End PBXBuildFile section */
 
@@ -32,11 +29,7 @@
 		B523CA9C18E2A2EA00DECAA3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B523CA9D18E2A2EA00DECAA3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B523CA9F18E2A2EA00DECAA3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		B523CAA618E2A2EA00DECAA3 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		B523CABF18E2A32600DECAA3 /* LighthouseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LighthouseManager.h; path = ../Lighthouse/LighthouseManager.h; sourceTree = "<group>"; };
-		B523CAC218E2A38A00DECAA3 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		B523CAC418E2A39000DECAA3 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
-		B523CAC618E2A39600DECAA3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		B523CAC818E2A47D00DECAA3 /* libLighthouse.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLighthouse.a; path = ../Lighthouse/libLighthouse.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -45,9 +38,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B523CAC718E2A39600DECAA3 /* CoreMotion.framework in Frameworks */,
-				B523CAC518E2A39000DECAA3 /* CoreBluetooth.framework in Frameworks */,
-				B523CAC318E2A38A00DECAA3 /* CoreLocation.framework in Frameworks */,
 				B523CAC918E2A47D00DECAA3 /* libLighthouse.a in Frameworks */,
 				B523CA9018E2A2EA00DECAA3 /* CoreGraphics.framework in Frameworks */,
 				B523CA9218E2A2EA00DECAA3 /* UIKit.framework in Frameworks */,
@@ -79,13 +69,9 @@
 		B523CA8C18E2A2EA00DECAA3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B523CAC618E2A39600DECAA3 /* CoreMotion.framework */,
-				B523CAC418E2A39000DECAA3 /* CoreBluetooth.framework */,
-				B523CAC218E2A38A00DECAA3 /* CoreLocation.framework */,
 				B523CA8D18E2A2EA00DECAA3 /* Foundation.framework */,
 				B523CA8F18E2A2EA00DECAA3 /* CoreGraphics.framework */,
 				B523CA9118E2A2EA00DECAA3 /* UIKit.framework */,
-				B523CAA618E2A2EA00DECAA3 /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
