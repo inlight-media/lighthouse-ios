@@ -48,6 +48,9 @@ typedef void (^SubscribeBlock)(id self, NSDictionary *data);
 - (void)requestPermission;
 - (BOOL)hasRequestedPermission;
 
+#pragma mark - Support
+- (BOOL)doesDeviceSupportBeacons;
+
 #pragma mark - Logging
 + (void)disableLogging;
 + (void)enableLogging;

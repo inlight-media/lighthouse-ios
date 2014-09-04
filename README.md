@@ -3,6 +3,10 @@ Lighthouse iOS SDK
 
 The Lighthouse iOS SDK is designed to be simple to develop with, allowing you to easily integrate Lighthouse iBeacon software into your apps. For more info about Lighthouse visit the [Lighthouse Website](http://lighthousebeacon.io)
 
+## Supported iOS Versions
+
+As Lighthouse relies on iBeacon support the SDK only performs functionality on iOS 7 (see supported devices http://support.apple.com/kb/HT6048). However the SDK still runs on iOS 6 apps but performs a graceful silent fallback. Any requests to the SDK will be ignored, you can even check whether the app supports beacons using "- (BOOL)doesDeviceSupportBeacons;" method.
+
 ## Install Guide
 
 Installing the client should be a breeze. If it's not, please let us know at [team@lighthousebeacon.io](mailto:team@lighthousebeacon.io)
@@ -389,6 +393,12 @@ What is the default behaviour when a beacon is detected when the app is in the f
 If a campaign is triggered then a push notification will be sent to the device, but because the app is open it won't make a noise or display an alert, the AppDelegate "didReceiveRemoteNotification" code will still trigger though so you can handle this situation. If no campaign is triggered for the beacon and the app is in the foreground then it will still fire the events such as "LighthouseDidEnterBeacon", "LighthouseDidExitBeacon", "LighthouseDidRangeBeacon" if you are subscribed to them.
 
 ## Changelog
+
+##### 1.3
+
++ Added iOS 6 graceful support. Those experiencing issues with their app building to iOS 6 devices should no longer receive errors. iOS 6 however doesn't support iBeacons so the SDK should silently do nothing on those devices.
++ Added - (BOOL)doesDeviceSupportBeacons; method to allow you to check at runtime whether the OS and device supports beacons. This should allow you to check in advance whether you want to activate certain functionality/behaviours in your app.
++ Improved log messages for unsupported devices when running "launch" method in the lighthouse sdk. You will receive "iBeacon is not supported on this device. Lighthouse cannot monitor beacons. List of iBeacon supported devices: http://support.apple.com/kb/HT6048" log message in your console (if logging enabled) for unsupported devices.
 
 ##### 1.2
 
