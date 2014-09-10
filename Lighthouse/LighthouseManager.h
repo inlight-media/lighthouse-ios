@@ -27,6 +27,7 @@ typedef void (^SubscribeBlock)(id self, NSDictionary *data);
 	NSTimer *_updateTimer;
 	NSMutableArray *_regions;
 	NSMutableDictionary *_activity;
+	NSDictionary *_settings;
 }
 
 + (LighthouseManager *)sharedInstance;
@@ -55,6 +56,9 @@ typedef void (^SubscribeBlock)(id self, NSDictionary *data);
 + (void)disableLogging;
 + (void)enableLogging;
 + (BOOL)isLoggingEnabled;
+
+#pragma mark - Settings
+- (NSDictionary *)settings;
 
 #pragma mark - Events
 - (NSString *)subscribe:(NSString *)event observer:(id)observer selector:(SEL)selector;

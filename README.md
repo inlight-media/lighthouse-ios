@@ -386,6 +386,35 @@ If all is working, open the cert (development-cert.pem) and key (development-key
 
 You can now use the Test Push Notification section to send a test notification to your device. You can also use the same process for generating your production keys (replacing "development" in filenames with "production")
 
+## Settings
+
+The Lighthouse SDK allows you to inspect specific settings for that are retrieved from the server whenever the application is opened (either launched or becomes active). These settngs contain the beacon uuids being monitored and also whether Lighthouse should be enabled or not. Importantly this "enabled" boolean allows you to remotely control from the server whether the Lighthouse SDK should be enabled on the device or not.
+
+Here is the structure of the settings at the current point in time. In future more settings will likely be added to the Lighthouse server but the structure will remain the same.
+
+	@{
+		@"enabled": NSNumber, // Represents boolean value of whether the SDK should be enabled for app
+		@"updated": NSDate, // Date when the settings were last updated on the phone from the server
+		@"uuids": NSArray, // NSArray of strings that has the beacon uuids in it
+	}
+
+You can retrieve these settings using two methods, because the request is asynchronous you should use both ways to get the latest updates.
+
+At anytime you can request the settings synchronously using
+
+	[[LighthouseManager sharedInstance] settings]
+
+NOTE: This method can return a nil value if the settings have not yet been retrieved for the application. Usually this is on first install of the app because after getting the settings once it saves the settings to the keychain for future app launches. However you are advised to specifically check this for nil value before trying to perform NSDictionary operations on the result otherwise you will create crashes.
+
+To asynchronously receive notification when the settings are updated you can subscribe in the same way as other events.
+
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidUpdateSettings" observer:self selector:@selector(didUpdateSettings:)];
+
+	- (void)didUpdateSettings:(NSDictionary *)data {
+		NSLog(@"didUpdateSettings %@", data);
+	}
+
+
 ## FAQs
 
 What is the default behaviour when a beacon is detected when the app is in the foreground? Can this be customised?
@@ -393,6 +422,10 @@ What is the default behaviour when a beacon is detected when the app is in the f
 If a campaign is triggered then a push notification will be sent to the device, but because the app is open it won't make a noise or display an alert, the AppDelegate "didReceiveRemoteNotification" code will still trigger though so you can handle this situation. If no campaign is triggered for the beacon and the app is in the foreground then it will still fire the events such as "LighthouseDidEnterBeacon", "LighthouseDidExitBeacon", "LighthouseDidRangeBeacon" if you are subscribed to them.
 
 ## Changelog
+
+##### 1.4
+
++ Added ability to read and subscribe to Lighthouse SDK server settings, in particular whether the SDK should be enabled or not. When the SDK is disabled non of the SDK commands will perform functionality. This means you can include the SDK in a release of your app with it disabled on the server and then in the future you can update the server to enabled and the SDK will begin to perform desired functionality. See Settings information [See Settings information](https://github.com/inlight-media/lighthouse-ios#settings).
 
 ##### 1.3
 

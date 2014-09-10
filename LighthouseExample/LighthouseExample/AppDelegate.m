@@ -37,6 +37,9 @@
     // Start monitoring
     [[LighthouseManager sharedInstance] launch];
 
+	// Read the settings on startup (NOTE: This value could be nil because settings are loaded asynchronously)
+	NSLog(@"Check settings at the start %@", [[LighthouseManager sharedInstance] settings]);
+
     // Request permission (you can do this whenever you like - it will ask user for location permission - possibly you want to wait until they reach a certain section of your app)
 	// To fire immediately
 	// [[LighthouseManager sharedInstance] requestPermission];
@@ -56,6 +59,7 @@
 	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidRangeBeacon" observer:self selector:@selector(didRangeBeacon:)];
 	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidReceiveNotification" observer:self selector:@selector(didReceiveNotification:)];
 	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidReceiveCampaign" observer:self selector:@selector(didReceiveCampaign:)];
+	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidUpdateSettings" observer:self selector:@selector(didUpdateSettings:)];
 
 	// If we have a notification in the payload get it out of launch options
 	NSDictionary *notification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -115,6 +119,10 @@
 	
 	NSDictionary *notification = [[[LighthouseManager sharedInstance] notifications] lastObject];
 	[[LighthouseManager sharedInstance] campaignActioned:notification];
+}
+
+- (void)didUpdateSettings:(NSDictionary *)data {
+	NSLog(@"didUpdateSettings %@", data);
 }
 
 #pragma mark - Push Notifications
