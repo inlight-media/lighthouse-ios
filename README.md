@@ -49,6 +49,10 @@ In your application plist file (often called "ApplicationName-Info.plist") add a
 
 These are needed to receive the background beacon notifications.
 
+To support updates in iOS 8 you need to add a string to the plist as well. This describes why your app needs location.
+
+- "NSLocationAlwaysUsageDescription"
+
 ### Compile
 Try and compile. It should work!
 
@@ -422,6 +426,10 @@ What is the default behaviour when a beacon is detected when the app is in the f
 If a campaign is triggered then a push notification will be sent to the device, but because the app is open it won't make a noise or display an alert, the AppDelegate "didReceiveRemoteNotification" code will still trigger though so you can handle this situation. If no campaign is triggered for the beacon and the app is in the foreground then it will still fire the events such as "LighthouseDidEnterBeacon", "LighthouseDidExitBeacon", "LighthouseDidRangeBeacon" if you are subscribed to them.
 
 ## Changelog
+
+##### 1.5
+
++ Update for iOS 8 CoreLocation "requestAlwaysAuthorization" method and NSLocationAlwaysUsageDescription plist string. These are needed for location/beacons to be scanned in background.
 
 ##### 1.4
 
