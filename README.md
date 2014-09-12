@@ -427,6 +427,10 @@ If a campaign is triggered then a push notification will be sent to the device, 
 
 ## Changelog
 
+##### 1.6
+
++ Update to support iOS 8 "registerForRemoteNotifications" as they have deprecated "registerForRemoteNotificationTypes"
+
 ##### 1.5
 
 + Update for iOS 8 CoreLocation "requestAlwaysAuthorization" method and NSLocationAlwaysUsageDescription plist string. These are needed for location/beacons to be scanned in background.
