@@ -5,11 +5,17 @@ The Lighthouse iOS SDK is designed to be simple to develop with, allowing you to
 
 ## Supported iOS Versions
 
-As Lighthouse relies on iBeacon support the SDK only performs functionality on iOS 7 (see supported devices http://support.apple.com/kb/HT6048). However the SDK still runs on iOS 6 apps but performs a graceful silent fallback. Any requests to the SDK will be ignored, you can even check whether the app supports beacons using "- (BOOL)doesDeviceSupportBeacons;" method.
+As Lighthouse relies on iBeacon support the SDK only performs functionality on iOS 7 (see supported devices http://support.apple.com/kb/HT6048). However the SDK still runs on iOS 5.1 and above apps but performs a graceful silent fallback. Any requests to the SDK will be ignored, you can even check whether the app supports beacons using "- (BOOL)doesDeviceSupportBeacons;" method.
+
+## SDK Specs
+
+Valid Architectures: armv7 armv7s i386 arm64
+Minimum iOS Deployment Target: 5.1
+Base SDK support: iOS 8
 
 ## Install Guide
 
-Installing the client should be a breeze. If it's not, please let us know at [team@lighthousebeacon.io](mailto:team@lighthousebeacon.io)
+Installing the client should be straight forward. If it's not, please let us know at [team@lighthousebeacon.io](mailto:team@lighthousebeacon.io)
 
 ### Universal Library
 
@@ -24,13 +30,7 @@ Within the folder called "Lighthouse" should be the following contents:
 - Lighthouse.h
 
 ### Add Files to Xcode
-Just drag the Lighthouse folder into your Xcode project.
-
-### Add Required Frameworks
-Go into your app's target’s Build Phases screen and add the following (if they don't already exist) to the "Link Binary With Libraries" section.
-
-- CoreLocation.framework
-- CoreBluetooth.framework
+Just drag the Lighthouse folder which includes those 2 files into your Xcode project.
 
 ### Build Settings
 Under your application targets "Build Settings" configuration find the "Other Linker Flags" property and set it to "-ObjC".
@@ -41,17 +41,16 @@ You'll need to import the LighthouseManager.h header into the files that contain
 	#import "LighthouseManager.h"
 
 ### Add Background Modes
-In your application plist file (often called "ApplicationName-Info.plist") add a row for
-"Required background modes" of type Array. It then needs:
+In your application plist file (often called "ApplicationName-Info.plist") add a row for "Required background modes" of type Array. It then needs:
 
 - "App registers for location updates"
+- "App downloads content in response to push notifications"
 - "App communicates using CoreBluetooth"
 
-These are needed to receive the background beacon notifications.
-
-To support updates in iOS 8 you need to add a string to the plist as well. This describes why your app needs location.
+To support updates in iOS 8 you need to add the following Cocoa Keys to the plist. Even for non iOS 8 apps its good practice to include these. They describe why your app needs location.
 
 - "NSLocationAlwaysUsageDescription"
+- "NSLocationUsageDescription"
 
 ### Compile
 Try and compile. It should work!
@@ -325,6 +324,15 @@ You can also check whether permission has been requested previously using:
 
 	[[LighthouseManager sharedInstance] hasRequestedPermission];
 
+### Prompting Bluetooth
+Some users have bluetooth turned off and you might want to prompt them to turn it on. iBeacons depends on bluetooth being on to function and the Lighthouse SDK cannot complete "launch" process without it. We don't want the SDK to prompt users automatically, instead we give you the control to prompt the users at any time (usually introducing the user as to why they'll need bluetooth). Once you prompt the user and if they subsequently turn on bluetooth then the SDK will automatically continue the launch process, if they don't turn on bluetooth then it will remain idle until a future time when they enable it.
+
+	[[LighthouseManager sharedInstance] promptBluetooth];
+
+You can also check whether bluetooth is on using the following method. This can be help you decide whether you need to show them an introuction screen about the importance of bluetooth.
+
+	[[LighthouseManager sharedInstance] isBluetoothOn];
+
 ### Requesting Push Notification Permission
 Likewise with location permission above you can request push notification permission from a user with the following methods. If your app has already requested permission this will operate silently in the background, it is still important to run them though if you want to receive push notifications for campaigns from the Lighthouse API.
 
@@ -362,7 +370,7 @@ You can also view an array of all notifications received (you could for instance
 
 	[[LighthouseManager sharedInstance] notifications]
 
-It can also be helpful to have access to the devices push notification token. You can use this in the Admin Integration page to test your push notifications certificates. Just copy/paste the value into the Test Push Notification section and hit send.
+It can also be helpful to have access to the devices push notification token. You can use this in the Admin Integration page to test your push notifications certificates. Just copy/paste the value into the Test Push Notification section and hit send. NOTE: this method will return an empty string value if they haven't accepted push notification permission. You can check the length of the string to see whether they accepted or not.
 
 	[[LighthouseManager sharedInstance] pushNotificationToken]
 
@@ -426,6 +434,20 @@ What is the default behaviour when a beacon is detected when the app is in the f
 If a campaign is triggered then a push notification will be sent to the device, but because the app is open it won't make a noise or display an alert, the AppDelegate "didReceiveRemoteNotification" code will still trigger though so you can handle this situation. If no campaign is triggered for the beacon and the app is in the foreground then it will still fire the events such as "LighthouseDidEnterBeacon", "LighthouseDidExitBeacon", "LighthouseDidRangeBeacon" if you are subscribed to them.
 
 ## Changelog
+
+##### 1.7
+
++ Added "(BOOL)isLocationPermissionAuthorized" method to check if location permission has been authorised
++ Added "(BOOL)isBluetoothOn" method to check if bluetooth is enabled
++ Added "(void)promptBluetooth" method to ask user to turn on bluetooth if they haven't already (use in combination with above check)
++ Added "(void)unload" method to completely reset Lighthouse back to factory defaults
++ Improved "launch" method flow with improved logging when a user hasn't enabled location / bluetooth yet. Call launch in your applicationDidLaunch then just ask for permissions when needed.
++ Further updates for iOS 8 support
++ Stability updates
++ Now supports Minimum Deployment Target of 5.1
++ The distance value for ranged beacons will update faster when in Immediate distance to the beacon, giving a value of 0 rather than relying on RSSI values.
++ Updated installation instructions
++ Updated example application
 
 ##### 1.6
 

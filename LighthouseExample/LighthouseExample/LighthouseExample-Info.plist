@@ -38,6 +38,7 @@
 	<array>
 		<string>location</string>
 		<string>bluetooth-central</string>
+		<string>remote-notification</string>
 	</array>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>We need to scan beacons in background. You can customise this message in the Info plist.</string>
