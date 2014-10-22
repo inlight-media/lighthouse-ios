@@ -276,6 +276,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 armv6 arm64 i386";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -295,6 +296,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 armv6 arm64 i386";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -47,11 +47,21 @@
 	[NSTimer scheduledTimerWithTimeInterval:5 target:[LighthouseManager sharedInstance] selector:@selector(requestPermission) userInfo:nil repeats:NO];
 
 
+    // Request bluetooth permission (you can do this whenever you like - it will ask user to turn on bluetooth if they haven't already - possibly you want to wait until they reach a certain section of your app)
+	// To fire immediately
+	// [[LighthouseManager sharedInstance] promptBluetooth];
+	// In this example we have delayed the permission request by 15 seconds
+	// You can also check if they have bluetooth enabled already by checking the return BOOL value of [[LighthouseManager sharedInstance] isBluetoothOn];
+	[NSTimer scheduledTimerWithTimeInterval:15 target:[LighthouseManager sharedInstance] selector:@selector(promptBluetooth) userInfo:nil repeats:NO];
+
+
     // Request push notification permission (you can do this whenever you like - it will ask user for push notification permission - possibly you want to wait until they reach a certain section of your app)
 	// To fire immediately
 	// [[LighthouseManager sharedInstance] requestPushNotifications];
 	// In this example we have delayed the permission request by 15 seconds
-	[NSTimer scheduledTimerWithTimeInterval:15 target:[LighthouseManager sharedInstance] selector:@selector(requestPushNotifications) userInfo:nil repeats:NO];
+	// You can check if they have already given push notification permission by checking the length of [[LighthouseManager sharedInstance] pushNotificationToken]; is greater than 0
+	[NSTimer scheduledTimerWithTimeInterval:30 target:[LighthouseManager sharedInstance] selector:@selector(requestPushNotifications) userInfo:nil repeats:NO];
+
 
 	// Listen to notifications from Lighthouse
 	[[LighthouseManager sharedInstance] subscribe:@"LighthouseDidEnterBeacon" observer:self selector:@selector(didEnterBeacon:)];
@@ -92,14 +102,18 @@
 
 - (void)didEnterBeacon:(NSDictionary *)data {
 	NSLog(@"didEnterBeacon %@", data);
+	// Show message with format "Enter: UUID-Major-Minor"
+	[self triggerLocalNotification:[NSString stringWithFormat:@"Enter: %@", data[@"key"]]];
 }
 
 - (void)didExitBeacon:(NSDictionary *)data {
 	NSLog(@"didExitBeacon %@", data);
+	// Show message with format "Exit: UUID-Major-Minor"
+	[self triggerLocalNotification:[NSString stringWithFormat:@"Exit: %@", data[@"key"]]];
 }
 
 - (void)didRangeBeacon:(NSDictionary *)data {
-	NSLog(@"didRangeBeacon %@", data);
+	//NSLog(@"didRangeBeacon %@", data);
 }
 
 - (void)didReceiveNotification:(NSDictionary *)data {
@@ -116,13 +130,33 @@
 	// You can then trigger a "campaign action" when the user clicks a button for instance to record how many people
 	// have see and performed an action on the campaign. For the moment we just wait 15 seconds before triggering
 	[NSTimer scheduledTimerWithTimeInterval:15 target:[LighthouseManager sharedInstance] selector:@selector(campaignActioned:) userInfo:data repeats:NO];
-	
-	NSDictionary *notification = [[[LighthouseManager sharedInstance] notifications] lastObject];
-	[[LighthouseManager sharedInstance] campaignActioned:notification];
+
+	// Often you will want to retrieve and action the last notification you received
+	// NSDictionary *notification = [[[LighthouseManager sharedInstance] notifications] lastObject];
+	// [[LighthouseManager sharedInstance] campaignActioned:notification];
 }
 
 - (void)didUpdateSettings:(NSDictionary *)data {
 	NSLog(@"didUpdateSettings %@", data);
+}
+
+- (void)triggerLocalNotification:(NSString *)text {
+	UILocalNotification *notification = [[UILocalNotification alloc] init];
+	notification.alertBody = text;
+	notification.fireDate = [[NSDate alloc] initWithTimeIntervalSinceNow:0];
+	notification.timeZone = [NSTimeZone defaultTimeZone];
+	notification.repeatInterval = 0;
+	notification.soundName = UILocalNotificationDefaultSoundName;
+	[[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+	UIApplicationState applicationState = application.applicationState;
+	if (applicationState == UIApplicationStateBackground) {
+		[application presentLocalNotificationNow:notification];
+	} else {
+		[[[UIAlertView alloc] initWithTitle:@"Beacon" message:notification.alertBody delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+	}
 }
 
 #pragma mark - Push Notifications

@@ -39,6 +39,7 @@ typedef void (^SubscribeBlock)(id self, NSDictionary *data);
 - (void)activate;
 - (void)suspend;
 - (void)terminate;
+- (void)unload;
 
 #pragma mark - Properties
 - (void)setProperties:(NSDictionary *)properties;
@@ -56,6 +57,10 @@ typedef void (^SubscribeBlock)(id self, NSDictionary *data);
 + (void)disableLogging;
 + (void)enableLogging;
 + (BOOL)isLoggingEnabled;
+
+#pragma mark - Bluetooth
+- (void)promptBluetooth;
+- (BOOL)isBluetoothOn;
 
 #pragma mark - Settings
 - (NSDictionary *)settings;
