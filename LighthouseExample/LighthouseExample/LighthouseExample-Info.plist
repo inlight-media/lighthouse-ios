@@ -36,8 +36,6 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>location</string>
-		<string>bluetooth-central</string>
 		<string>remote-notification</string>
 	</array>
 	<key>NSLocationAlwaysUsageDescription</key>
