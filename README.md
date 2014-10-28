@@ -439,6 +439,7 @@ If a campaign is triggered then a push notification will be sent to the device, 
 + Removed dependency on "location" background mode
 + Exits are now a bit slower to register (~45 seconds from tests). Enters still appear close to immediate. It also can take several minutes for updates to begin registering after you restart your device.
 Note: It is important to remove these background modes as apps are being rejected from Apple for having them.
++ Fix for enabling lighthouse if it is disabled from server settings or loss of internet connection and the app is reopened
 
 ##### 1.7
 
