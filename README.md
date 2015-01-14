@@ -43,9 +43,7 @@ You'll need to import the LighthouseManager.h header into the files that contain
 ### Add Background Modes
 In your application plist file (often called "ApplicationName-Info.plist") add a row for "Required background modes" of type Array. It then needs:
 
-- "App registers for location updates"
 - "App downloads content in response to push notifications"
-- "App communicates using CoreBluetooth"
 
 To support updates in iOS 8 you need to add the following Cocoa Keys to the plist. Even for non iOS 8 apps its good practice to include these. They describe why your app needs location.
 
@@ -434,6 +432,14 @@ What is the default behaviour when a beacon is detected when the app is in the f
 If a campaign is triggered then a push notification will be sent to the device, but because the app is open it won't make a noise or display an alert, the AppDelegate "didReceiveRemoteNotification" code will still trigger though so you can handle this situation. If no campaign is triggered for the beacon and the app is in the foreground then it will still fire the events such as "LighthouseDidEnterBeacon", "LighthouseDidExitBeacon", "LighthouseDidRangeBeacon" if you are subscribed to them.
 
 ## Changelog
+
+##### 1.8
+
++ Removed dependency on "bluetooth-central" background mode
++ Removed dependency on "location" background mode
++ Exits are now a bit slower to register (~45 seconds from tests). Enters still appear close to immediate. It also can take several minutes for updates to begin registering after you restart your device.
+Note: It is important to remove these background modes as apps are being rejected from Apple for having them.
++ Fix for enabling lighthouse if it is disabled from server settings or loss of internet connection and the app is reopened
 
 ##### 1.7
 
